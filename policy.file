@@ -1,0 +1,12 @@
+Your task is simple - recreate ex3, but in python using any AI tool you want (prompts you used will be submitted in a separate pdf file, did I mention that?), with a few key changes:
++ The function for printing the board is not given.
++ The board's dimensions  are received from the user as inputs and need to be validated, and the game's goal will be adjusted accordingly by the logic explained later.
+ 
+N-Connect Logic:
++ Since we want to make our board’s size adjustable, we are going to change the length of the sequence we need to mark.
++ Anything less than 2 or greater than 100 (101 and above, rows or columns) - invalid.
++ If 2 is chosen for either rows or columns, sequence is 2 (very short game, but that is the user’s responsibility)
++ If either is 3 - game transforms to tic-tac-toe and the board is 3X3 (Ix Igul), two human players only. You can assume no one is going to mark a taken cell.
++ 4 <= rows or columns <= 5 sequence is 3
++ 6 <= rows or columns <= 10 sequence is 4
++ 11 and above - sequence is 5

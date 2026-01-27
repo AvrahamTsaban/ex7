@@ -242,3 +242,64 @@ Checked [](file:///home/avraham_tsaban/cs/ex7/ex7.py), no problems found
 עכשיו `is_in_bounds` משמשת בכל מקום - עם פרמטר column בלבד ב-`human_choice`, ועם כל הפרמטרים ב-`line_length`.
 
 Made changes.
+
+
+## appendix: prompts to create readme.md
+User: תעד את הפרויקט בקובץ הזה
+
+GitHub Copilot: I'll document the project in the readme.md file. First, let me read the existing files to understand what this project is about. 
+
+Read [](file:///home/avraham_tsaban/cs/ex7/readme.md)
+
+Read [](file:///home/avraham_tsaban/cs/ex7/ex7.py#1-1), lines 1 to 100
+
+Read [](file:///home/avraham_tsaban/cs/ex7/prompts.md#1-1), lines 1 to 100
+
+Read [](file:///home/avraham_tsaban/cs/ex7/ex3_instructions.md#1-1), lines 1 to 100
+
+Read [](file:///home/avraham_tsaban/cs/ex7/policy.file)
+
+Read [](file:///home/avraham_tsaban/cs/ex7/ex7.py#100-100), lines 100 to 200
+
+Read [](file:///home/avraham_tsaban/cs/ex7/ex7.py#200-200), lines 200 to 429
+
+Now I'll create comprehensive documentation in the readme.md file in Hebrew, since the user requested it in Hebrew. 
+
+Using "Replace String in File"
+
+
+```
+
+```
+תיעדתי את הפרויקט ב-readme.md. התיעוד כולל:
+
+## תוכן התיעוד
+
+✅ **מידע כללי** - שם, ת"ז, תיאור הפרויקט  
+✅ **דרישות מערכת והתקנה**  
+✅ **חוקי המשחק** - טבלה מפורטת של מימדים ואורכי רצף  
+✅ **הסבר מצבי משחק** - Tic-Tac-Toe ו-Connect-N  
+✅ **סוגי שחקנים** - אנושי ומחשב  
+✅ **אסטרטגיית AI** - 5 שלבי עדיפות מפורטים  
+✅ **מבנה הקוד** - כל הפונקציות עם הסברים  
+✅ **קבועים** - תיעוד כל הקבועים בקוד  
+✅ **דוגמאות שימוש** - 3 תרחישים שונים  
+✅ **אימות קלט** - הסבר מערכת האימות  
+✅ **רשימת קבצים** - תיאור כל קובץ בפרויקט  
+✅ **תהליך פיתוח** - התייחסות לפיתוח עם AI
+
+התיעוד כתוב בעברית כפי שביקשת, עם דוגמאות קוד, טבלאות ולינקים פנימיים לקבצים אחרים בפרויקט.
+
+Made changes.
+
+User: אני מעדיף שהתיעוד יהיה באנגלית
+
+GitHub Copilot: Using "Replace String in File"
+
+
+```
+
+```
+Done! I've translated the entire documentation from Hebrew to English in readme.md.
+
+Made changes.

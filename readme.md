@@ -48,8 +48,14 @@ The game supports various board dimensions with dynamic rules:
 ### Tic-Tac-Toe Mode
 
 - 3x3 board only
-- Two human players only
-- Players directly choose row and column (no token dropping from top)
+- Two human players only (Human vs Human)
+- Players enter position 1-9 (positions map left-to-right, top-to-bottom)
+- Position mapping:
+  ```
+  1|2|3
+  4|5|6
+  7|8|9
+  ```
 - Win by creating a sequence of 3 diagonally, horizontally, or vertically
 
 ### Connect-N Mode
@@ -60,15 +66,15 @@ The game supports various board dimensions with dynamic rules:
 
 ## Player Types
 
-### Human Player
+### Human Player (h)
 - Prompted to enter column choice (or row and column in tic-tac-toe)
 - Input undergoes validation checks:
   - Is the value numeric
   - Is it within valid range
   - Is the column not full
 
-### Computer Player
-The computer uses a smart priority strategy:
+### Computer Player (r - random/simple, s - strategic)
+Both 'r' and 's' options use the same smart priority strategy:
 
 1. **Immediate Win** - If there's a winning move, execute it
 2. **Block Opponent's Win** - If opponent is about to win, block them
@@ -124,12 +130,13 @@ Program entry point:
 - **`get_player_type(player_number)`** - Prompts for player type selection
 - **`human_choice(board, cols)`** - Prompts human for column choice
 - **`human_input(cols)`** - Collects and validates numeric input
-- **`tic_tac_toe_input(board, rows, cols)`** - Row and column input for tic-tac-toe
+- **`tic_tac_toe_input(board)`** - Position input (1-9) for tic-tac-toe
 
 #### Board Management
 
 - **`init_board(rows, cols)`** - Creates new empty board
-- **`print_board(board, rows, cols, ttt_mode)`** - Displays the board
+- **`print_board(board, rows, cols, ttt_mode)`** - Displays the board for Connect-N
+- **`print_board_ttt(board)`** - Displays the board for tic-tac-toe
 - **`make_move(board, column, token)`** - Executes a move
 - **`get_free_row(board, column)`** - Finds available row in column
 
@@ -161,14 +168,13 @@ Program entry point:
 
 ```
 $ python3 ex7.py
-Enter number of rows (2-100): 6
-Enter number of columns (2-100): 7
-
-Connect-4 (6 rows x 7 cols)
-Sequence to win: 4
-
-Choose type for player 1: h - human, c - computer: h
-Choose type for player 2: h - human, c - computer: c
+Enter number of rows
+6
+Enter number of columns
+7
+Connect Four - Or More [Or Less] (6 rows x 7 cols, connect 4)
+Choose type for player 1: h - human, r - random/simple computer, s - strategic computer: h
+Choose type for player 2: h - human, r - random/simple computer, s - strategic computer: s
 
 |.|.|.|.|.|.|.|
 |.|.|.|.|.|.|.|
@@ -187,34 +193,33 @@ Enter column (1-7): 4
 
 ```
 $ python3 ex7.py
-Enter number of rows (2-100): 3
-Enter number of columns (2-100): 5
-
-Tic-Tac-Toe mode! (3 rows x 3 cols)
+Enter number of rows
+3
+Enter number of columns
+3
+Tic Tac Toe (Human vs Human)
+|.|.|.|
 Sequence to win: 3
 
 |.|.|.|
 |.|.|.|
 |.|.|.|
-
-Player 1 (X) turn.
-Enter row (1-3): 2
-Enter column (1-3): 2
+Enter position (1-9):
 ...
+```
 ```
 
 ### Large Game (Connect-5)
 
 ```
 $ python3 ex7.py
-Enter number of rows (2-100): 12
-Enter number of columns (2-100): 15
-
-Connect-5 (12 rows x 15 cols)
-Sequence to win: 5
-
-Choose type for player 1: h - human, c - computer: c
-Choose type for player 2: h - human, c - computer: c
+Enter number of rows
+12
+Enter number of columns
+15
+Connect Four - Or More [Or Less] (12 rows x 15 cols, connect 5)
+Choose type for player 1: h - human, r - random/simple computer, s - strategic computer: s
+Choose type for player 2: h - human, r - random/simple computer, s - strategic computer: s
 ...
 ```
 
@@ -233,7 +238,8 @@ The program performs comprehensive validation:
    - Column cannot be full
 
 3. **Player Type Selection:**
-   - Only 'h' or 'c' (case-insensitive)
+   - Options: 'h' (human), 'r' (random/simple computer), or 's' (strategic computer)
+   - Case-insensitive
    - Error message with retry guidance
 
 ## Project Files

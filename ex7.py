@@ -35,15 +35,13 @@ def main():
     # Special case: tic-tac-toe mode (3x3 board)
     if rows == TTT_DIMENSION or cols == TTT_DIMENSION:
         rows, cols = TTT_DIMENSION, TTT_DIMENSION
-        print(f"\nTic-Tac-Toe mode! ({rows} rows x {cols} cols)")
-        print(f"Sequence to win: {TTT_DIMENSION}\n")
+        print("Tic Tac Toe (Human vs Human)")
         board = init_board(rows, cols)
-        print_board(board, rows, cols)
+        print_board_ttt(board)
         run_tic_tac_toe(board, rows, cols)
     else:
         connect_n = calculate_connect_n(rows, cols)
-        print(f"\nConnect-{connect_n} ({rows} rows x {cols} cols)")
-        print(f"Sequence to win: {connect_n}\n")
+        print(f"Connect Four - Or More [Or Less] ({rows} rows x {cols} cols, connect {connect_n})")
         p1_type = get_player_type(1)
         p2_type = get_player_type(2)
         board = init_board(rows, cols)
@@ -68,7 +66,7 @@ def get_valid_dimension(dimension_name):
     """
     while True:
         try:
-            value = int(input(f"Enter number of {dimension_name} ({MIN_DIMENSION}-{MAX_DIMENSION}): "))
+            value = int(input(f"Enter number of {dimension_name}\n"))
             if MIN_DIMENSION <= value <= MAX_DIMENSION:
                 return value
             print(f"Invalid input. Choose between {MIN_DIMENSION} and {MAX_DIMENSION}.")
@@ -95,12 +93,12 @@ def get_player_type(player_number):
     Returns HUMAN or COMPUTER constant.
     """
     while True:
-        choice = input(f"Choose type for player {player_number}: h - human, c - computer: ").strip()
+        choice = input(f"Choose type for player {player_number}: h - human, r - random/simple computer, s - strategic computer: ").strip()
         if choice.lower() == 'h':
             return HUMAN
-        elif choice.lower() == 'c':
+        elif choice.lower() in ('r', 's', 'c'):
             return COMPUTER
-        print("Invalid selection. Enter h or c.")
+        print("Invalid selection. Enter h, r, or s.")
 
 
 def init_board(rows, cols):
@@ -124,9 +122,18 @@ def print_board(board, rows, cols, ttt_mode=False):
     print("\n")
 
 
+def print_board_ttt(board):
+    """Prints the tic-tac-toe board without leading newline or column numbers."""
+    for r in range(3):
+        print("|", end="")
+        for c in range(3):
+            print(f"{board[r][c]}|", end="")
+        print()
+
+
 def run_tic_tac_toe(board, rows, cols):
     """
-    Tic-tac-toe game loop. Two human players, direct cell placement.
+    Tic-tac-toe game loop. Two human players, position-based input (1-9).
     Assumes no one marks a taken cell (per policy.file).
     """
     current_player = 1
@@ -134,12 +141,11 @@ def run_tic_tac_toe(board, rows, cols):
     while True:
         token = TOKEN_P1 if current_player == 1 else TOKEN_P2
         
-        print(f"Player {current_player} ({token}) turn.")
-        row, col = tic_tac_toe_input(board, rows, cols)
+        row, col = tic_tac_toe_input(board)
         
         # Place token directly in chosen cell
         board[row][col] = token
-        print_board(board, rows, cols, ttt_mode=True)
+        print_board_ttt(board)
         
         # Check for win
         if line_length(board, rows, cols, row, col, TTT_DIMENSION, token) >= TTT_DIMENSION:
@@ -155,18 +161,20 @@ def run_tic_tac_toe(board, rows, cols):
         current_player = 2 if current_player == 1 else 1
 
 
-def tic_tac_toe_input(board, rows, cols):
+def tic_tac_toe_input(board):
     """
-    Prompts human player to enter row and column for tic-tac-toe.
+    Prompts human player to enter position (1-9) for tic-tac-toe.
+    Positions map: 1-3 top row, 4-6 middle row, 7-9 bottom row.
     Returns (row, col) as 0-based indices.
     """
     while True:
         try:
-            row = int(input(f"Enter row (1-{rows}): ")) - 1
-            col = int(input(f"Enter column (1-{cols}): ")) - 1
-            if not (0 <= row < rows and 0 <= col < cols):
-                print(f"Invalid position. Choose row 1-{rows} and column 1-{cols}.")
+            pos = int(input("Enter position (1-9):\n"))
+            if not (1 <= pos <= 9):
+                print("Invalid position. Choose 1-9.")
                 continue
+            row = (pos - 1) // 3
+            col = (pos - 1) % 3
             if board[row][col] != EMPTY:
                 print("Cell already taken. Choose another cell.")
                 continue

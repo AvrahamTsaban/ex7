@@ -2,7 +2,7 @@
 
 ## Overview
 
-A Connect-N game implemented in Python, extending the C-based Exercise 3 with dynamic board dimensions from user input, automatic win-sequence calculation, human and computer players, and a special tic-tac-toe mode for 3×3 boards. This exercise was developed using AI tools (Claude via GitHub Copilot) as required by the assignment.
+A Connect-N game implemented in Python, extending the [C-based Exercise 3](https://github.com/AvrahamTsaban/ex3) with dynamic board dimensions from user input, automatic win-sequence calculation, human and computer players, and a special tic-tac-toe mode for 3×3 boards. This exercise was developed using AI tools (Claude via GitHub Copilot) as required by the assignment.
 
 ## Author
 

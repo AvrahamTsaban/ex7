@@ -1,7 +1,6 @@
 """
 EX7 - Python Connect-N
 Name: Avraham Tsaban
-ID: 207088733
 Assignment: 7
 
 A Connect-N game implementation in Python, supporting:

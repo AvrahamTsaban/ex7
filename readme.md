@@ -1,269 +1,126 @@
-# EX7 - Python Connect-N
+# Exercise 7 — Python Connect-N
 
-**Author:** Avraham Tsaban  
-**ID:** 207088733  
-**Assignment:** 7
+## Overview
 
-## Project Description
-
-A Connect-N game implementation in Python, featuring dynamic board dimensions, automatic win sequence calculation, human and computer players, and a special tic-tac-toe mode for 3x3 boards.
-
-This project is based on Exercise 3 written in C, but extended with additional capabilities:
-- Board dimensions received from user input (instead of compilation flags)
-- Dynamic calculation of the required win sequence length
-- Special tic-tac-toe mode for 3x3 boards
-
-## System Requirements
-
-- Python 3.9.25 or higher
-- Operating System: Linux / macOS / Windows
-
-## Installation and Running
-
-```bash
-# Clone the project
-git clone https://github.com/CSI-BIU/ex7.git
-cd ex7
-
-# Run the game
-python3 ex7.py
-```
-
-## Game Rules
-
-### Board Dimensions and Sequence Length
-
-The game supports various board dimensions with dynamic rules:
-
-| Board Size | Win Sequence Length | Notes |
-|-----------|---------------------|-------|
-| 2 | 2 | Very short game |
-| 3 | 3 (Tic-Tac-Toe) | 3x3 board, two human players only |
-| 4-5 | 3 | |
-| 6-10 | 4 | |
-| 11-100 | 5 | |
-
-**Note:** If either dimension is 3, the game automatically switches to tic-tac-toe mode.
-
-### Tic-Tac-Toe Mode
-
-- 3x3 board only
-- Two human players only (Human vs Human)
-- Players enter position 1-9 (positions map left-to-right, top-to-bottom)
-- Position mapping:
-  ```
-  1|2|3
-  4|5|6
-  7|8|9
-  ```
-- Win by creating a sequence of 3 diagonally, horizontally, or vertically
-
-### Connect-N Mode
-
-- Players drop tokens into columns
-- Tokens fall to the lowest available position in the column
-- Win by creating a sequence of N consecutive tokens (vertical, horizontal, or diagonal)
-
-## Player Types
-
-### Human Player (h)
-- Prompted to enter column choice (or row and column in tic-tac-toe)
-- Input undergoes validation checks:
-  - Is the value numeric
-  - Is it within valid range
-  - Is the column not full
-
-### Computer Player (r - random/simple, s - strategic)
-Both 'r' and 's' options use the same smart priority strategy:
-
-1. **Immediate Win** - If there's a winning move, execute it
-2. **Block Opponent's Win** - If opponent is about to win, block them
-3. **Create (N-1) Sequence** - Create a sequence one short of winning
-4. **Block Opponent's (N-1) Sequence** - Block dangerous opponent sequence
-5. **Choose by Center Priority** - Select columns from center outward
-
-#### Center Priority Strategy
-
-Columns are chosen based on proximity to center:
-- Center column receives highest priority
-- Adjacent columns checked alternately left and right
-- For equidistant columns, left column is chosen first
-
-**Example:** For a board with 7 columns:
-```
-Priority: [3, 4, 2, 5, 1, 6, 0]  # (0-based indices)
-Display:  [4, 5, 3, 6, 2, 7, 1]   # (column numbers for user)
-```
-
-## Code Structure
-
-### Constants
-
-```python
-EMPTY = '.'       # Empty cell on board
-TOKEN_P1 = 'X'    # Player 1 token
-TOKEN_P2 = 'O'    # Player 2 token
-
-HUMAN = 1         # Player type code - human
-COMPUTER = 2      # Player type code - computer
-
-MIN_DIMENSION = 2    # Minimum board dimension
-MAX_DIMENSION = 100  # Maximum board dimension
-TTT_DIMENSION = 3    # Tic-tac-toe dimension
-
-FAILURE = -1      # Failure return value
-```
-
-### Main Functions
-
-#### `main()`
-Program entry point:
-- Gets board dimensions from user
-- Determines game type (tic-tac-toe or connect-n)
-- Gets player types
-- Starts game loop
-
-#### Input and Validation
-
-- **`get_board_dimensions()`** - Prompts user for board dimensions
-- **`get_valid_dimension(dimension_name)`** - Validates single dimension input
-- **`get_player_type(player_number)`** - Prompts for player type selection
-- **`human_choice(board, cols)`** - Prompts human for column choice
-- **`human_input(cols)`** - Collects and validates numeric input
-- **`tic_tac_toe_input(board)`** - Position input (1-9) for tic-tac-toe
-
-#### Board Management
-
-- **`init_board(rows, cols)`** - Creates new empty board
-- **`print_board(board, rows, cols, ttt_mode)`** - Displays the board for Connect-N
-- **`print_board_ttt(board)`** - Displays the board for tic-tac-toe
-- **`make_move(board, column, token)`** - Executes a move
-- **`get_free_row(board, column)`** - Finds available row in column
-
-#### Game Loops
-
-- **`run_connect_n(board, rows, cols, connect_n, p1_type, p2_type)`** - Main loop for connect-n mode
-- **`run_tic_tac_toe(board, rows, cols)`** - Loop for tic-tac-toe mode
-
-#### State Checks
-
-- **`is_column_full(board, column)`** - Checks if column is full
-- **`is_board_full(board, cols)`** - Checks if entire board is full
-- **`is_board_full_ttt(board, rows, cols)`** - Full board check for tic-tac-toe
-- **`is_in_bounds(cols, column, rows, row)`** - Checks if index is within bounds
-
-#### Win Detection
-
-- **`line_length(board, rows, cols, row, column, connect_n, token)`** - Checks maximum sequence length in all 4 directions (horizontal, vertical, two diagonals)
-
-#### Artificial Intelligence
-
-- **`computer_choose(board, rows, cols, connect_n, token)`** - Chooses column for computer
-- **`set_priority(cols)`** - Creates column priority list
-- **`calculate_connect_n(rows, cols)`** - Calculates required sequence length for win
-
-## Usage Examples
-
-### Classic 6x7 Game (Connect-4)
-
-```
-$ python3 ex7.py
-Enter number of rows
-6
-Enter number of columns
-7
-Connect Four - Or More [Or Less] (6 rows x 7 cols, connect 4)
-Choose type for player 1: h - human, r - random/simple computer, s - strategic computer: h
-Choose type for player 2: h - human, r - random/simple computer, s - strategic computer: s
-
-|.|.|.|.|.|.|.|
-|.|.|.|.|.|.|.|
-|.|.|.|.|.|.|.|
-|.|.|.|.|.|.|.|
-|.|.|.|.|.|.|.|
-|.|.|.|.|.|.|.|
- 1 2 3 4 5 6 7
-
-Player 1 (X) turn.
-Enter column (1-7): 4
-...
-```
-
-### Tic-Tac-Toe Game
-
-```
-$ python3 ex7.py
-Enter number of rows
-3
-Enter number of columns
-3
-Tic Tac Toe (Human vs Human)
-|.|.|.|
-Sequence to win: 3
-
-|.|.|.|
-|.|.|.|
-|.|.|.|
-Enter position (1-9):
-...
-```
-```
-
-### Large Game (Connect-5)
-
-```
-$ python3 ex7.py
-Enter number of rows
-12
-Enter number of columns
-15
-Connect Four - Or More [Or Less] (12 rows x 15 cols, connect 5)
-Choose type for player 1: h - human, r - random/simple computer, s - strategic computer: s
-Choose type for player 2: h - human, r - random/simple computer, s - strategic computer: s
-...
-```
-
-## Input Validation
-
-The program performs comprehensive validation:
-
-1. **Board Dimensions:**
-   - Must be integers
-   - Within range 2-100
-   - Appropriate error messages with retry guidance
-
-2. **Column Selection:**
-   - Must be a number
-   - Within range 1 to number of columns
-   - Column cannot be full
-
-3. **Player Type Selection:**
-   - Options: 'h' (human), 'r' (random/simple computer), or 's' (strategic computer)
-   - Case-insensitive
-   - Error message with retry guidance
-
-## Project Files
-
-- **`ex7.py`** - Main game code file
-- **`ex3.c`** - Original C code (for reference)
-- **`ex3_instructions.md`** - Original exercise instructions
-- **`policy.file`** - Specific requirements policy for exercise 7
-- **`prompts.md`** - Documentation of AI code creation process
-- **`readme.md`** - This file
-
-## AI-Assisted Development
-
-This project was developed with Claude (via GitHub Copilot) through several iterations:
-1. Initial creation based on the C code
-2. Fix tic-tac-toe mode for correct operation
-3. Additional adjustments and documentation development
-
-The complete process is documented in [prompts.md](prompts.md).
-
-## License
-
-See [LICENSE](LICENSE) file for details.
+A Connect-N game implemented in Python, extending the C-based Exercise 3 with dynamic board dimensions from user input, automatic win-sequence calculation, human and computer players, and a special tic-tac-toe mode for 3×3 boards. This exercise was developed using AI tools (Claude via GitHub Copilot) as required by the assignment.
 
 ## Author
 
-Avraham Tsaban - Exercise 7 for Introduction to Computer Science, BIU
+Avraham Tsaban
+
+## Requirements
+
+- Python 3.9 or higher
+
+## Running
+
+```bash
+python3 ex7.py
+```
+
+## Game Modes
+
+### Connect-N Mode
+
+Standard gravity-based game where tokens drop to the lowest available position. Win sequence length depends on board dimensions:
+
+| Board Size | Win Sequence |
+|-----------|-------------|
+| 2 | 2 |
+| 3 | Tic-tac-toe mode (see below) |
+| 4–5 | 3 |
+| 6–10 | 4 |
+| 11–100 | 5 |
+
+Players choose columns (1-based). Computer AI uses priority strategy: win → block → threaten → block threat → center preference.
+
+### Tic-Tac-Toe Mode
+
+Activates when either dimension is 3 (forces a 3×3 board). Human vs. Human only. Players enter positions 1–9 mapped as:
+
+```
+1|2|3
+4|5|6
+7|8|9
+```
+
+## Player Types
+
+- **`h`** — Human (manual input)
+- **`r`** — Computer (random/simple strategy)
+- **`s`** — Computer (strategic — same priority logic as `r`)
+
+## Code Structure
+
+All code is in a single file `ex7.py` (437 lines).
+
+### Entry Point
+
+| Function | Description |
+|----------|-------------|
+| `main()` | Gets board dimensions and player types, determines game mode, starts the game loop. |
+
+### Input and Validation
+
+| Function | Description |
+|----------|-------------|
+| `get_board_dimensions()` → `(rows, cols)` | Prompts for board dimensions, validates range 2–100. |
+| `get_valid_dimension(dimension_name)` → `int` | Validates a single dimension input. |
+| `get_player_type(player_number)` → `int` | Prompts for player type (`h`/`r`/`s`). |
+| `human_choice(board, cols)` → `int` | Gets a valid, non-full column from the human (0-based). |
+| `human_input(cols)` → `int` | Reads and validates numeric column input. |
+| `tic_tac_toe_input(board)` → `(row, col)` | Reads position 1–9 for tic-tac-toe mode; rejects taken cells. |
+
+### Board Operations
+
+| Function | Description |
+|----------|-------------|
+| `init_board(rows, cols)` → `list` | Creates a 2D board filled with `EMPTY` (`.`). |
+| `print_board(board, rows, cols, ttt_mode)` | Prints the board with column numbers (mod 10 for wide boards). |
+| `print_board_ttt(board)` | Prints the 3×3 tic-tac-toe board. |
+| `make_move(board, column, token)` → `int` | Drops token into the lowest free row; returns row index. |
+| `get_free_row(board, column)` → `int` | Finds lowest empty row in a column (`FAILURE` if full). |
+| `is_column_full(board, column)` → `bool` | Checks if top cell is occupied. |
+| `is_board_full(board, cols)` → `bool` | Checks if all columns are full (Connect-N). |
+| `is_board_full_ttt(board, rows, cols)` → `bool` | Checks if all cells are occupied (tic-tac-toe). |
+| `is_in_bounds(cols, column, rows, row)` → `bool` | Validates indices are within board boundaries. |
+
+### Game Loops
+
+| Function | Description |
+|----------|-------------|
+| `run_connect_n(board, rows, cols, connect_n, p1_type, p2_type)` | Main Connect-N loop — alternates turns until win or tie. |
+| `run_tic_tac_toe(board, rows, cols)` | Tic-tac-toe loop — two human players, position-based input. |
+
+### Win Detection
+
+| Function | Description |
+|----------|-------------|
+| `line_length(board, rows, cols, row, col, connect_n, token)` → `int` | Checks all 4 directions from a placed token; returns longest consecutive chain. |
+| `calculate_connect_n(rows, cols)` → `int` | Determines win sequence length based on board dimensions (2–5). |
+
+### Computer AI
+
+| Function | Description |
+|----------|-------------|
+| `computer_choose(board, rows, cols, connect_n, token)` → `int` | 5-tier strategy: win → block win → extend to N−1 → block N−1 → center-first fallback. |
+| `set_priority(cols)` → `list[int]` | Column priority list: center outward, left-first on ties. |
+
+## Project Files
+
+| File | Description |
+|------|-------------|
+| `ex7.py` | Source code |
+| `ex7.example` | Reference Linux executable provided by the TA |
+| `ex7_instructions.md` | Exercise instructions |
+| `ex3_instructions.md` | Original C exercise instructions (for reference) |
+| `policy.file` | Requirements policy for this exercise |
+| `prompts.md` | Documentation of the AI-assisted development process |
+
+## AI-Assisted Development
+
+This project was developed with Claude (via GitHub Copilot) as required by the exercise. The complete prompt history is documented in [prompts.md](prompts.md).
+
+## Attribution
+
+The exercise design, specifications, and instructions were created by **Shalom Adoram**, the Teaching Assistant responsible for this assignment. The instructions file (`ex7_instructions.md`) and the reference executable (`ex7.example`) are his work. Any license in this repository applies only to the student's code implementation.
